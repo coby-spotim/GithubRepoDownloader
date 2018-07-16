@@ -14,6 +14,10 @@ config :github_repo_downloader,
   organization: "MyOrganization"
 ```
 
+You can also place this in the ```config/config.exs``` if you prefer.
+
 ## Run
 
-To run the program, run the following command: ```mix start```
+To run the program, run the following command: ```mix start```.
+
+If you've placed the configuration in ```config/prod.exs```, run ```MIX_ENV=prod mix start```.
