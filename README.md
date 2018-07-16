@@ -13,3 +13,7 @@ config :github_repo_downloader,
   access_token: "1234567890",
   organization: "MyOrganization"
 ```
+
+## Run
+
+To run the program, run the following command: ```mix start```
