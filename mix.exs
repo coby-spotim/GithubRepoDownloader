@@ -21,8 +21,9 @@ defmodule GithubRepoDownloader.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:tentacat, "~> 1.0.0"},
-      {:git_cli, "~> 0.2"}
+      {:tentacat, ">= 0.0.0"},
+      {:git_cli, ">= 0.0.0"},
+      {:progress_bar, "> 0.0.0"}
     ]
   end
 end
