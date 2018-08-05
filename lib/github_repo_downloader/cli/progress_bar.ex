@@ -1,4 +1,4 @@
-defmodule GithubRepoDownloader.ProgressBar do
+defmodule GithubRepoDownloader.CLI.ProgressBar do
   use GenServer
 
   def start_link(total) do

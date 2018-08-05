@@ -27,7 +27,7 @@ defmodule GithubRepoDownloader do
     ]
 
     repos = ProgressBar.render_spinner(format, fn -> list_team_repos(team_id) end)
-    {:ok, progress_bar} = GithubRepoDownloader.ProgressBar.start_link(length(repos))
+    {:ok, progress_bar} = GithubRepoDownloader.CLI.ProgressBar.start_link(length(repos))
 
     Enum.map(repos, fn repo -> Task.async(fn -> download_repo(repo, dir, progress_bar) end) end)
     |> Enum.each(fn task -> Task.await(task, 120_000) end)
@@ -45,6 +45,6 @@ defmodule GithubRepoDownloader do
       {:ok, _repo} = Git.clone(ssh_url)
     end
 
-    GithubRepoDownloader.ProgressBar.update_progress(progress_bar)
+    GithubRepoDownloader.CLI.ProgressBar.update_progress(progress_bar)
   end
 end
