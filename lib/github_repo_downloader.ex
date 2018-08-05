@@ -19,15 +19,32 @@ defmodule GithubRepoDownloader do
   end
 
   def download_team_repos(team_id, dir) do
-    repos = list_team_repos(team_id)
+    format = [
+      frames: :bars,
+      text: "Loading repositories metadata from GitHub...",
+      done: [IO.ANSI.green(), "✓", IO.ANSI.reset(), " Loaded."],
+      spinner_color: IO.ANSI.magenta()
+    ]
 
-    Enum.map(repos, fn repo -> Task.async(fn -> download_repo(repo, dir) end) end)
-    |> Enum.each(&Task.await(&1, 120_000))
+    repos = ProgressBar.render_spinner(format, fn -> list_team_repos(team_id) end)
+    {:ok, progress_bar} = GithubRepoDownloader.CLI.ProgressBar.start_link(length(repos))
+
+    Enum.map(repos, fn repo -> Task.async(fn -> download_repo(repo, dir, progress_bar) end) end)
+    |> Enum.each(fn task -> Task.await(task, 120_000) end)
   end
 
-  def download_repo(%{name: name, ssh_url: ssh_url}, dir) do
+  def download_repo(%{name: name, ssh_url: ssh_url}, dir, progress_bar) do
     :ok = File.cd(dir)
-    System.cmd("git", ["clone", ssh_url])
-    {:ok, name}
+    repo_path = Path.join(dir, name)
+
+    if File.exists?(repo_path) do
+      repo = Git.new(repo_path)
+      {:ok, _output} = Git.fetch(repo)
+      {:ok, _output} = Git.pull(repo)
+    else
+      {:ok, _repo} = Git.clone(ssh_url)
+    end
+
+    GithubRepoDownloader.CLI.ProgressBar.update_progress(progress_bar)
   end
 end

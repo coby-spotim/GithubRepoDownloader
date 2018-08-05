@@ -21,6 +21,6 @@ defmodule GithubRepoDownloader.CLI.TeamChoice do
   defp confirm_team(chosen_team) do
     Shell.cmd("clear")
     Shell.info(chosen_team.team)
-    if Shell.yes?("Confirm?"), do: chosen_team, else: start()
+    if Shell.yes?("Confirm this team?"), do: chosen_team, else: start()
   end
 end

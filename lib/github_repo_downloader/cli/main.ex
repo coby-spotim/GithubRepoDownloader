@@ -6,12 +6,16 @@ defmodule GithubRepoDownloader.CLI.Main do
     Shell.prompt("Press Enter to continue")
     team = team_choice()
     download_repos(team)
-    Shell.info("All repositories for the #{team.team} team have been downloaded into the following directory:")
+
+    Shell.info(
+      "All repositories for the #{team.team} team have been downloaded into the following directory:"
+    )
+
     Shell.info(Path.expand("../#{team.team}"))
   end
 
   defp welcome_message do
-    Shell.info("=== GitHub Organization Repo Downloader ===")
+    Shell.info("===== Welcome To The GitHub Organization Repo Downloader =====")
     Shell.info("Make sure to define your access token and organization in the config.exs file.")
   end
 
@@ -21,7 +25,14 @@ defmodule GithubRepoDownloader.CLI.Main do
 
   defp download_repos(team) do
     Shell.cmd("clear")
-    Shell.info("I will now download all of the #{team.team} repositories from GitHub into a #{team.team} folder")
+
+    Shell.info(
+      "I will now download all of the #{team.team} repositories from GitHub into a #{team.team} folder"
+    )
+
+    Shell.info(
+      "If the folder exists, I will update any repositories in it with the most recent version on GitHub"
+    )
 
     if File.exists?("../#{team.team}") do
       Shell.info("Downloading...")

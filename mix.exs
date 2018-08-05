@@ -4,7 +4,7 @@ defmodule GithubRepoDownloader.MixProject do
   def project do
     [
       app: :github_repo_downloader,
-      version: "0.1.0",
+      version: "2.0.0",
       elixir: "~> 1.6",
       start_permanent: Mix.env() == :prod,
       deps: deps()
@@ -21,7 +21,9 @@ defmodule GithubRepoDownloader.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:tentacat, "~> 1.0.0"}
+      {:tentacat, ">= 0.0.0"},
+      {:git_cli, ">= 0.0.0"},
+      {:progress_bar, "> 0.0.0"}
     ]
   end
 end
