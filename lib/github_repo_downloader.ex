@@ -29,7 +29,11 @@ defmodule GithubRepoDownloader do
     repos = ProgressBar.render_spinner(format, fn -> list_team_repos(team_id) end)
     {:ok, progress_bar} = GithubRepoDownloader.CLI.ProgressBar.start_link(length(repos))
 
-    Enum.map(repos, fn repo -> Task.async(fn -> download_repo(repo, dir, progress_bar) end) end)
+    {:ok, task_sup_pid} = Task.Supervisor.start_link()
+
+    Enum.map(repos, fn repo ->
+      Task.Supervisor.async(task_sup_pid, fn -> download_repo(repo, dir, progress_bar) end)
+    end)
     |> Enum.each(fn task -> Task.await(task, 120_000) end)
   end
 
